@@ -1,0 +1,20 @@
+{% extends 'base/main.html' %} 
+
+{% block content %} 
+  <main class="container-fluid overflow-hidden pt-3 pb-5 px-4">
+    <div class="col-10 col-md-8 mx-auto">
+      <div class="card">
+        <div class="card-header py-3 card__header delete">
+          <a href="{{ request.META.HTTP_REFERER }}"><i class="bi bi-arrow-left"></i></a> Back
+        </div>
+        <div class="card-body">
+          <form method="POST" action="">
+            {% csrf_token %} 
+            <p>Are you sure you want to delete "{{ obj }}"?</p>
+            <button type="button" class="btn btn-danger">Delete</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </main>
+{% endblock content %} 

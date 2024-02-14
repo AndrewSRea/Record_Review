@@ -1,0 +1,58 @@
+{% extends 'base/main.html' %} 
+
+{% block content %} 
+  <main class="container-fluid overflow-hidden pt-3 pb-5 px-4">
+    <div class="row gx-3">
+      <div class="col-12 col-md-10 mx-auto">
+        <div class="d-flex justify-content-center mb-3">
+          <h4 class="highest-header">Highest Rated Albums</h4>
+        </div>
+        {% for album in highest_rated_albums %} 
+          <div class="card mb-3">
+            <div class="card-header py-3">
+              <div class="d-flex align-items-center">
+                <div class="flex-shrink-0 d-none d-md-block">
+                  <img src="{{ album.image.url }}" class="rounded album-img" />
+                </div>
+                <div class="flex-grow-1 ps-md-3">
+                  <div class="d-flex justify-content-between album-header">
+                    <h5 class="card-title"><a href="{% url 'album' album.id %}">{{ album.artist }} - {{ album.title }}</a></h5>
+                    <p>Avg. Rating: <span class="rating">{{ album.avg_rating }}</span></p>
+                  </div>
+                  <div class="d-flex justify-content-between user-header">
+                    <p class="text-muted">Reviewed by <a href="{% url 'profile' album.creator.id %}" class="username">{{ album.creator }}</a> on {{ album.created|date:"N j, Y" }}</p>
+                    <p class="text-muted">User Rating: 
+                      <span class="added-rating">{{ album.rating }}</span></p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="card-body">
+              <p class="mb-0 album-comment">{{ album.comment }}</p>
+            </div>
+            <div class="card-footer d-flex align-items-center justify-content-between">
+              <p><a href="{% url 'album' album.id %}">{{ album.review_set.all.count }} 
+                {% if album.review_set.all.count == 0 %} 
+
+                {% else %}
+                  more 
+                {% endif %}
+                {% if album.review_set.all.count == 1 %}
+                  review 
+                {% else %} 
+                  reviews 
+                {% endif %}</a></p>
+              {% if request.user == album.creator %} 
+                <div class="d-lg-block gap-2" role="group" aria-label="Edit and delete">
+                  <a class="btn btn-primary btn-sm" href="{% url 'update-album' album.id %}" role="button">Edit</a>
+                  <a class="btn btn-danger btn-sm" href="{% url 'delete-album' album.id %}" role="button">Delete</a>
+                </div>
+              {% endif %} 
+              <a href="{% url 'album' album.id %}" class="add-review">+ Add your review</a>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  </main>
+{% endblock content %} 

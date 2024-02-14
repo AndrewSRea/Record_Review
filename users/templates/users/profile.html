@@ -1,0 +1,41 @@
+{% extends 'base/main.html' %}
+
+{% block content %} 
+  <main class="container-fluid overflow-hidden pt-3 pb-5 px-4">
+    <div class="row gx-3">
+
+      {% include 'base/sidebar_component.html' %} 
+
+      <div class="col-12 col-lg-8">
+        <div class="vstack mb-2 text-center profile-group">
+          <div>
+            <img src="{{ user.profile.image.url }}" alt="Profile image" class="rounded-circle profile-image" width="60" height="60" />
+          </div>
+          <h4 class="pt-2">{{ user.username }}</h4>
+          <p class="pt-0 text-light">
+            <span>{{ user.album_set.all.count }}</span>
+            {% if user.album_set.all.count == 1 %} 
+              Review 
+            {% else %} 
+              Reviews 
+            {% endif %} 
+          </p>
+          {% if request.user == user %} 
+            <a type="button" href="{% url 'update-profile' %}" class="btn btn-warning rounded-pill mx-auto px-3">
+              Edit Profile
+            </a>
+          {% endif %} 
+        </div>
+        <div class="vstack align-items-start profile-group">
+          <h5>About</h5>
+          <p class="text-light">
+            {{ user.profile.bio }}
+          </p>
+        </div>
+
+        {% include 'base/feed_component.html' %}
+
+      </div>
+    </div>
+  </main>
+{% endblock content %} 

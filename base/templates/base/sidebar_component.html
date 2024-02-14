@@ -1,0 +1,71 @@
+<div class="col-4 d-none d-lg-block">
+  <div class="card mb-4">
+    <div class="card-header py-0 ps-0">
+      <button class="btn btn-link shadow-none" data-bs-toggle="modal" data-bs-target="#aboutModal">
+        How Record Review Works <i class="bi bi-chevron-right"></i>
+      </button>
+      <div class="modal fade" id="aboutModal" tabindex="1" aria-labelledby="aboutModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="aboutModalLabel">Welcome to Record Review!</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              Write some reviews for your favorite music albums using the <br>
+              <span style="color: #e1b10f;">+ Create a Review</span> button. 
+              Add the music album's artist or band name, the name of the album, your own rating of the 
+              album, and write your review of the album. You can even add an image of the album cover 
+              to your review! (<a target="_blank" href="https://www.wikipedia.org/">wikipedia.org</a> 
+              is a good resource for finding those album images.)<br>
+              You can also add your own review and rating to other existing album reviews by clicking the 
+              <a href="{% url 'create-album' %}">+ Add your review</a> links inside each album review.<br>
+              So have some fun and get reviewing!
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card mb-3 list-card">
+    <div class="card-header card__header">
+      Highest Rated
+    </div>
+    <div class="card-body list-body">
+      {% for album in highest_rated_albums %} 
+        <div class="d-flex justify-content-between">
+          <p class="list-item"><a href="{% url 'album' album.id %}">{{ album.artist }} - {{ album.title }}</a></p><span>{{ album.avg_rating }}</span>
+        </div>
+      {% endfor %} 
+    </div>
+    <!-- link to a "Highest Rated" page? listing the 10 Highest Rated? -->
+    <div class="card-footer">
+      <a class="list-expand" href="{% url 'highest-rated' %}">+ More</a>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-header card__header">
+      Recent Activity
+    </div>
+    <div class="card-body pb-1">
+      {% for review in recent_reviews %} 
+        <div class="card mb-3">
+          <div class="card-header">
+            <p>
+              <a href="{% url 'profile' review.reviewer.id %}">{{ review.reviewer }}</a> 
+              gave a {{ review.rating }} rating to <a href="{% url 'album' review.album.id %}">{{ review.album.artist }} - {{ review.album.title }}</a>
+              <br><br>
+              <span>{{ review.created|timesince }}</span>
+            </p>
+          </div>
+          <div class="card-body">
+            <p>{{ review.comment|truncatechars:100 }}</p>
+            {% if request.user == review.reviewer %} 
+              <a href="{% url 'delete-review' review.id %}">Delete</a>
+            {% endif %} 
+          </div>
+        </div>
+      {% endfor %} 
+    </div>
+  </div>
+</div>

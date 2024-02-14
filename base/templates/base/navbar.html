@@ -1,0 +1,67 @@
+{% load static %} 
+<nav class="navbar navbar-expand-md navbar-dark dark fixed-top">
+  <div class="container-fluid px-4 py-2">
+    <div class="col-2 col-md-4">
+      <a class="navbar-brand d-flex align-items-center text-warning" href="{% url 'reviews-home' %}">
+        <svg
+          xlmns="http://www.w3.org/2000/svg"
+          width="20"
+          height="20"
+          fill="currentColor"
+          class="bi bi-vinyl-fill me-2 brand-icon"
+          viewBox="0 0 16 16"
+        >
+          <path d="M8 6a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm0 3a1 1 0 1 1 0-2 1 1 0 0 1 0 2z" />
+          <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM4 8a4 4 0 1 0 8 0 4 4 0 0 0-8 0z" />
+        </svg>
+        <span class="d-none d-md-block navbar-title">Record Review</span>
+      </a>
+    </div>
+    <div class="col-6 col-md-4">
+      <form method="GET" action="{% url 'reviews-home' %}" class="d-flex" role="search">
+        <span class="input-group-text border-0" id="search-addon">
+          <i class="bi bi-search"></i>
+        </span>
+        <input 
+          class="form-control"
+          type="search" 
+          name="q" 
+          placeholder="Search for band/artist or album..."
+          aria-label="Search"  
+        />
+      </form>
+    </div>
+    <div class="col-4 d-flex justify-content-end">
+      <div class="d-flex align-items-center user-group">
+        {% if request.user.is_authenticated %} 
+          <img src="{{ request.user.profile.image.url }}" alt="Profile Pic" class="rounded-circle user-image" />
+          <a class="nav-item nav-link ps-2 pe-0 text-warning" href="{% url 'profile' request.user.id %}">
+            {{ request.user.username }}
+          </a>
+          <a
+            class="nav-link dropdown-toggle ps-2 dropdown-icon"
+            id="navbarDropdownMenuLink"
+            role="button"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          ></a>
+          <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuLink">
+            <li class="text-center">
+              <a class="dropdown-item" href="{% url 'update-profile' %}">
+                <i class="bi bi-gear pe-2"></i>Settings
+              </a>
+            </li>
+            <li><hr class="dropdown-divider"></li>
+            <li class="text-center">
+              <a class="dropdown-item" href="{% url 'logout' %}">
+                <i class="bi bi-box-arrow-right pe-2"></i>Logout
+              </a>
+            </li>
+          </ul>
+        {% else %} 
+          <a class="nav-item nav-link pe-0 text-warning" href="{% url 'login' %}">Login</a>
+        {% endif %} 
+      </div>
+    </div>
+  </div>
+</nav>

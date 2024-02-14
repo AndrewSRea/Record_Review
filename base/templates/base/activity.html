@@ -1,0 +1,36 @@
+{% extends 'base/main.html' %} 
+
+{% block content %} 
+  <main class="container-fluid overflow-hidden pt-3 pb-3 px-4">
+    <div class="col-10 col-md-8 mx-auto">
+      <div class="card">
+        <div class="card-header d-flex align-items-center py-3 card__header">
+          <div class="col-1">
+            <a href="{% url 'reviews-home' %}"><i class="bi bi-arrow-left"></i></a>
+          </div>
+          <div class="col-10 text-center text-primary">
+            Recent Activity
+          </div>
+          <div class="col-1"></div>
+        </div>
+        <div class="card-body pb-1">
+          {% for review in album_reviews %} 
+            <div class="card mb-3">
+              <div class="card-header">
+                <p>
+                  <a href="{% url 'profile' review.reviewer.id %}">{{ review.reviewer }}</a> 
+                  gave a {{ review.rating }} to <a href="{% url 'album' review.album.id %}">{{ review.album.artist }} - {{ review.album.title }}</a>
+                  <br><br>
+                  <span>{{ review.created|timesince }} ago</span>
+                </p>
+              </div>
+              <div class="card-body">
+                <p class="mb-0">{{ review.comment }}</p>
+              </div>
+            </div>
+          {% endfor %} 
+        </div>
+      </div>
+    </div>
+  </main>
+{% endblock content %}

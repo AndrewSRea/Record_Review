@@ -1,0 +1,31 @@
+{% extends 'base/main.html' %} 
+
+{% load crispy_forms_tags %} 
+
+{% block content %} 
+  <main class="container-fluid overflow-hidden pt-3 pb-3 px4">
+    <div class="col-10 col-md-8 mx-auto">
+      <div class="card">
+        <div class="card-header d-flex align-items-center py-3 card__header">
+          <div class="col-1">
+            <a href="{% url 'reviews-home' %}"><i class="bi bi-arrow-left"></i></a>
+          </div>
+          <div class="col-10 text-center text-primary">
+            Create/Update a Review
+          </div>
+          <div class="col-1"></div>
+        </div>
+        <div class="card-body">
+          <form method="POST" action="" enctype="multipart/form-data">
+            {% csrf_token %} 
+            {{ form|crispy }}
+            <div class="d-grid gap-2 d-sm-flex justify-content-sm-end">
+              <a href="{% url 'reviews-home' %}" class="btn btn-secondary me-md-2">Cancel</a>
+              <button type="submit" class="btn btn-info" type="button">Submit</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </main>
+{% endblock content %} 

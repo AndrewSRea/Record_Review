@@ -1,0 +1,90 @@
+{% extends 'base/main.html' %} 
+
+{% block content %}
+  <main class="container-fluid overflow-hidden pt-3 pb-5 px-4">
+    <div class="row gx-3">
+
+      {% include 'base/sidebar_component.html' %} 
+
+      <div class="col-12 col-lg-8">
+
+        <div class="card mb-3">
+          <div class="card-header py-3">
+            <div class="d-flex align-items-center">
+              <div class="flex-shrink-0 d-none d-md-block">
+                <img src="{{ album.image.url }}" alt="" class="rounded album-img" />
+              </div>
+              <div class="flex-grow-1 ps-md-3">
+                <div class="d-flex justify-content-between album-header">
+                  <h5 class="card-title"><a href="#">{{ album.artist }} - {{ album.title }}</a></h5>
+                  <p>Avg.Rating: <span class="rating">{{ album.avg_rating }}</span></p>
+                </div>
+                <div class="d-flex justify-content-between user-header">
+                  <p class="text-muted">Reviewed by <a href="{% url 'profile' album.creator.id %}" class="username">{{ album.creator }}</a> on {{ album.created|date:"N j, Y" }}</p>
+                  <p class="text-muted">User Rating: <span class="review-rating">{{ album.rating }}</span></p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card-body">
+            <p class="album-comment pb-3">{{ album.comment }}</p>
+          </div>
+          <div class="accordion" id="accordionExample">
+            <div class="accordion-item">
+              <h2 class="accordion-header">
+                <button 
+                  class="accordion-button collapsed shadow-none" type="button" style="color: #0d6efd;" 
+                  data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" 
+                  aria-controls="collapseOne"
+                >
+                  Add your review
+                </button>
+              </h2>
+              <div id="collapseOne" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                <div class="accordion-body">
+                  <form method="POST" action="">
+                    {% csrf_token %} 
+                    <div class="mb-3">
+                      <label for="rating">Add your rating for <span>{{ album.artist }} - {{ album.title }}:</span></label>
+                      <input type="number" id="rating" name="rating" min="0" max="10" value="10" class="ps-1" />
+                    </div>
+                    <div class="mb-3">
+                      <textarea type="text" name="comment" placeholder="Add your own review or comment..." rows="3" class="w-100 ps-1"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-info">Submit</button>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+          {% if reviews %}
+            <div class="card-footer py-3"> 
+              <div class="card mb-3 review-body">
+                {% for review in reviews %} 
+                  <div class="card m-3">
+                    <div class="card-header reviewer__header">
+                      <div class="d-flex justify-content-between pt-2">
+                        <p><a href="{% url 'profile' review.reviewer.id %}" class="pe-2">{{ review.reviewer }}</a> Reviewed {{ review.created|timesince }} ago</p> <span>Rating: {{ review.rating }}</span>
+                      </div>
+                      <hr class="pt-0">
+                      <div class="vstack">
+                        <p class="mb-2 review-comment">{{ review.comment }}</p>
+                        {% if request.user == review.reviewer %} 
+                          <div class="d-lg-block mx-auto" role="group" aria-label="Edit and delete">
+                            <a class="btn btn-danger btn-sm" href="{% url 'delete-review' review.id %}" role="button">Delete</a>
+                          </div>
+                        {% endif %} 
+                      </div>
+                    </div>
+                  </div>
+                {% endfor %} 
+              </div>
+            </div>
+          {% endif %} 
+        </div>
+
+      </div>
+
+    </div>
+  </main>
+{% endblock content %}
